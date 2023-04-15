@@ -1,11 +1,11 @@
-import { getUserBySessionToken } from 'db';
+import { getUserBySessionToken } from '../db';
 import express, { NextFunction } from 'express';
 import { merge } from 'lodash';
 
 export const isAuthenticated = async (req: express.Request, res: express.Response, next: NextFunction) => {
     try{
         /** Check if cookie is set */
-        const sessionToken = req.cookies('INDINA-AUTH');
+        const sessionToken = req.cookies['INDICINA-AUTH'];
         if(!sessionToken){
             return res.status(403).send('Cookie not found');
         }

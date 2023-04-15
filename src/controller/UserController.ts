@@ -1,4 +1,4 @@
-import { deleteUserById, getUserById, getUsers } from 'db';
+import { deleteUserById, getUserById, getUsers } from '../db';
 import express from 'express';
 
 export const fectUsers = async (req: express.Request, res: express.Response) => {
@@ -21,7 +21,7 @@ export const deleteUser = async (req: express.Request, res: express.Response) =>
             return res.sendStatus(400);
         }
 
-        const deletedUser = deleteUserById(id);
+        const deletedUser = await deleteUserById(id);
         
         /** User deleted successful */
         if(!deletedUser){
