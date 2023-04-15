@@ -1,6 +1,6 @@
 import express from 'express';
-import { getUserByEmail, createUser } from 'db';
-import { random, authentication } from 'helpers';
+import { getUserByEmail, createUser } from '../db';
+import { random, authentication } from '../helpers';
 
 export const register = async (req: express.Request, res: express.Response) => {
     try{
@@ -14,7 +14,7 @@ export const register = async (req: express.Request, res: express.Response) => {
         const existingUser = await getUserByEmail(email);
 
         /** If user exist send bad request status */
-        if(!existingUser){
+        if(existingUser){
             return res.status(400).send("Email already taken.");
         }
 
