@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import compression from 'compression';
 import cors from 'cors';
+import mongoose from 'mongoose';
 
 const app = express();
 
@@ -25,3 +26,17 @@ const port = process.env.PORT? process.env.PORT : 9000;
 server.listen(port, ()=> {
     console.log("Server listening at port: ", port); 
 })
+
+/** Mongo Database connection url
+ * If you are connection to a live cluster
+ * change the url to the live cluster url.
+ */
+const MONGO_URL = 'mongodb://127.0.0.1:27017/UrlShrinkDB';
+
+/** Sync mongoose Promise with node's Promise
+ * and connect to the local mongoDB.
+ */
+mongoose.Promise = Promise;
+mongoose.connect(MONGO_URL);
+mongoose.connection.on('open', ()=> console.log('Database Connected...'));
+mongoose.connection.on('error', (error: Error) => console.log(error));
