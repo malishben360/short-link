@@ -1,8 +1,8 @@
 import { deleteUser, fectUsers } from '../../controller/UserController';
 import express from 'express';
-import { isAuthenticated } from '../../middleware';
+import { isAuthenticated, isOwner } from '../../middleware';
 
 export default (router: express.Router) => {
     router.get('/users', isAuthenticated, fectUsers);
-    router.delete('/users/:id', isAuthenticated, deleteUser);
+    router.delete('/users/:id', isAuthenticated, isOwner, deleteUser);
 }
