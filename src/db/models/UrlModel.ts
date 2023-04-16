@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const UrlSchema = new mongoose.Schema(
+const URLSchema = new mongoose.Schema(
     {
         long_url: {type: String, required: true},
         encoded: {type: String, required: true},
@@ -14,15 +14,15 @@ const UrlSchema = new mongoose.Schema(
     }
 );
 
-export const UrlModel = mongoose.model('Url', UrlSchema);
+export const URLModel = mongoose.model('Url', URLSchema);
 
 /**Url model actions */
-export const getUrls = () => UrlModel.find();
-export const getUrlsByUserId = (user_id: string) => UrlModel.find({ user_id });
-export const getUrlById = (id: string) => UrlModel.findById(id);
-export const getUrlByEncoded = (encoded: string) => UrlModel.findOne({ encoded });
-export const getUrlByLongUrl = (userId: string, longURL: string) => UrlModel.findOne({ long_url: longURL, user_id: userId });
-export const deletUrlById = (id: string) => UrlModel.findOneAndDelete({ _id: id });
-export const createUrl = (values: Record<string, any>) => new UrlModel(values)
+export const getURLs = () => URLModel.find();
+export const getURLsByUserId = (user_id: string) => URLModel.find({ user_id });
+export const getURLById = (id: string) => URLModel.findById(id);
+export const getURLByEncoded = (encoded: string) => URLModel.findOne({ encoded });
+export const getURLByURL = (userId: string, longURL: string) => URLModel.findOne({ long_url: longURL, user_id: userId });
+export const deletURLById = (id: string) => URLModel.findOneAndDelete({ _id: id });
+export const createURL = (values: Record<string, any>) => new URLModel(values)
     .save().then((url) => url.toObject());
-export const updateUrlById = (id: string, values: Record<string, any>) => UrlModel.findByIdAndUpdate(id, values);
+export const updateURLById = (id: string, values: Record<string, any>) => URLModel.findByIdAndUpdate(id, values);

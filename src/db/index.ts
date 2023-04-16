@@ -11,12 +11,12 @@ export {
 
 /** Url actions */
 export { 
-    getUrls,
-    getUrlsByUserId,
-    getUrlById,
-    getUrlByEncoded,
-    getUrlByLongUrl,
-    deletUrlById,
-    createUrl,
-    updateUrlById,
+    getURLs,
+    getURLsByUserId,
+    getURLById,
+    getURLByEncoded,
+    getURLByURL,
+    deletURLById,
+    createURL,
+    updateURLById,
  } from './models/UrlModel';

@@ -1,4 +1,4 @@
-import { createUrl, getUrlByEncoded, getUrlByLongUrl } from '../db';
+import { createURL, getURLByURL } from '../db';
 import express from 'express';
 import { encodeURI } from '../helpers';
 import { get } from 'lodash';
@@ -22,14 +22,14 @@ export const createShortURL = async (req: express.Request, res: express.Response
         /** Ensure no duplicate long URL for same user.
          * Return the if exist.
          */
-        const existingLongURL = await getUrlByLongUrl(userId, longURL);
+        const existingLongURL = await getURLByURL(userId, longURL);
         if (existingLongURL) {
             return res.status(200).json({
                 shortURL: `http://short.est/${ existingLongURL.encoded }`
             })
         }
 
-        const shortURL = await createUrl({
+        const shortURL = await createURL({
             long_url: longURL,
             encoded: encoded,
             user_id: userId
