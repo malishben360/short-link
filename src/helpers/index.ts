@@ -22,7 +22,7 @@ export const authentication = (salt: string, password: string): string => {
 /** Encoded character creator
  * Return: encoded characters
  */
-export const encodeURI = (longURL: string) => {
+export const encodeURL = (longURL: string) => {
 
     // Hash the long URL using SHA256 to get an integer value
     const updatedURL = longURL.concat(Date.now().toString());

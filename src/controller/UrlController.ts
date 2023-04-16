@@ -1,6 +1,6 @@
 import { createURL, getURLByEncoded, getURLByURL } from '../db';
 import express from 'express';
-import { encodeURI, extractEncoded, DOMAIN } from '../helpers';
+import { encodeURL, extractEncoded, DOMAIN } from '../helpers';
 import { get } from 'lodash';
 
 export const encodeLongURL = async (req: express.Request, res: express.Response) => {
@@ -17,7 +17,7 @@ export const encodeLongURL = async (req: express.Request, res: express.Response)
         }
 
         /** Get short URL code */
-        const encoded = encodeURI(longURL);
+        const encoded = encodeURL(longURL);
 
         /** Ensure no duplicate long URL for same user.
          * Return the if exist.
