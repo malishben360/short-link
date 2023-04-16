@@ -1,9 +1,9 @@
-import { createURL, getURLByURL } from '../db';
+import { createURL, getURLByEncoded, getURLByURL } from '../db';
 import express from 'express';
-import { encodeURI } from '../helpers';
+import { encodeURI, extractEncoded, DOMAIN } from '../helpers';
 import { get } from 'lodash';
 
-export const createShortURL = async (req: express.Request, res: express.Response) => {
+export const encodeLongURL = async (req: express.Request, res: express.Response) => {
     try{
         const { longURL } = req.body;
         let userId = get(req, 'identity._id') as string;
@@ -48,4 +48,31 @@ export const createShortURL = async (req: express.Request, res: express.Response
         return res.status(400).send('Database operation failed');
     }
     
+}
+
+export const decodeShortURL = async (req: express.Request, res: express.Response) => {
+    try {
+        const { shortURL } = req.body;
+
+        /** Check for short URL */
+        if (!shortURL || !(shortURL.startsWith(DOMAIN))) {
+            return res.status(400).send('URL sanitization');
+        }
+
+        /** Get extract encoded from short URL*/
+        const encoded = extractEncoded(shortURL);
+
+        /** Check if URL exist */
+        const url = await getURLByEncoded(encoded);
+        if (!url) {
+            return res.sendStatus(404);
+        }
+
+        return res.status(200).json({
+            longURL: url.long_url
+        }).end();
+    } catch (error) {
+        console.log(error);
+        return res.sendStatus(400);
+    }
 }

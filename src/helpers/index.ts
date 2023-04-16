@@ -3,6 +3,11 @@ import crypto from 'crypto';
 /** Define secret for crypto update */
 const SECRET = process.env.SECRET || 'INDICINA-REST-API';
 
+/** Define hosting domain
+ * Default: http://short.est
+*/
+export const DOMAIN = process.env.SECRET || 'http://short.est/';
+
 /** Define character set for encoding (A-Z, a-z, 0-9) */
 const CHARSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
@@ -41,7 +46,7 @@ export const encodeURI = (longURL: string) => {
 export const extractEncoded = (shortURL: string) => {
 
     // Extract the encoded characters from the long URL
-    const encoded = shortURL.replace(/^http:\/\/localhost:9000\/api\/v1\//, "");
+    const encoded = shortURL.replace(DOMAIN, "");
 
     return encoded;
 }
