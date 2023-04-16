@@ -20,7 +20,8 @@ export const authentication = (salt: string, password: string): string => {
 export const encodeURI = (longURL: string) => {
 
     // Hash the long URL using SHA256 to get an integer value
-    const hash = crypto.createHash("sha256").update(longURL).digest("hex");
+    const updatedURL = longURL.concat(Date.now().toString());
+    const hash = crypto.createHash("sha256").update(updatedURL).digest("hex");
     const rand = parseInt(hash, 16);
     // Convert the random number to base-62 using CHARSET
     let encoded = '';
@@ -31,7 +32,7 @@ export const encodeURI = (longURL: string) => {
         remainder = Math.floor(remainder / CHARSET.length);
     }
 
-    return encoded;
+    return encoded.slice(0, 6);
 }
 
 /** Encoded  characters extractor

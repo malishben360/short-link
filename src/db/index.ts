@@ -15,6 +15,7 @@ export {
     getUrlsByUserId,
     getUrlById,
     getUrlByEncoded,
+    getUrlByLongUrl,
     deletUrlById,
     createUrl,
     updateUrlById,

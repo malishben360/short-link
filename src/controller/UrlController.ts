@@ -1,31 +1,38 @@
-import { createUrl, getUrlByEncoded } from 'db';
+import { createUrl, getUrlByEncoded, getUrlByLongUrl } from '../db';
 import express from 'express';
-import { encodeURI } from 'helpers';
+import { encodeURI } from '../helpers';
 import { get } from 'lodash';
 
 export const createShortURL = async (req: express.Request, res: express.Response) => {
     try{
         const { longURL } = req.body;
-        const userId = get(req, 'indentity._id') as string;
+        let userId = get(req, 'identity._id') as string;
+        
+        /** Convert userId to string literals */
+        userId = userId.toString();
 
         /** Check for long URL */
         if (!longURL) {
-            return res.sendStatus(400);
+            return res.status(400).send('Long URL is missing');
         }
 
-        let encoded = encodeURI(longURL);
-        let existingURL = getUrlByEncoded(encoded);
+        /** Get short URL code */
+        const encoded = encodeURI(longURL);
 
-        /** Ensure no dupplicate shortURL */
-        while (existingURL) {
-            encoded = encodeURI(longURL);
-            existingURL = getUrlByEncoded(encoded);
+        /** Ensure no duplicate long URL for same user.
+         * Return the if exist.
+         */
+        const existingLongURL = await getUrlByLongUrl(userId, longURL);
+        if (existingLongURL) {
+            return res.status(200).json({
+                shortURL: `http://short.est/${ existingLongURL.encoded }`
+            })
         }
 
         const shortURL = await createUrl({
             long_url: longURL,
             encoded: encoded,
-            user_id: userId.toString()
+            user_id: userId
         });
 
         /** URL is no created */
@@ -33,13 +40,12 @@ export const createShortURL = async (req: express.Request, res: express.Response
             return res.sendStatus(500);
         }
 
-        return res.status(200).json({
-            ...shortURL,
-            short_url: `http://localhost:9000/api/v1/${encoded}`
+        return res.status(201).json({
+            shortURL: `http://short.est/${ encoded }`
         }).end();
     } catch (error) {
         console.log("Error: ", error);
-        return res.sendStatus(400);
+        return res.status(400).send('Database operation failed');
     }
     
 }
