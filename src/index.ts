@@ -21,7 +21,7 @@ app.use(bodyParser.json());
 
 const server = http.createServer(app);
 
-const port = process.env.PORT? process.env.PORT : 9000;
+const port = process.env.PORT || 9000;
 
 /**Server listening at port 9000 by default if port environment variable is null */
 server.listen(port, ()=> {
