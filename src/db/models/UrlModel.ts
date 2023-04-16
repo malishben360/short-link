@@ -22,4 +22,6 @@ export const getUrlsByUserId = (userId: string) => UrlModel.find({ user_id: user
 export const getUrlById = (id: string) => UrlModel.findById(id);
 export const getUrlByEncoded = (encoded: string) => UrlModel.findOne({ encoded });
 export const deletUrlById = (id: string) => UrlModel.findOneAndDelete({ _id: id });
+export const createUrl = (values: Record<string, any>) => new UrlModel(values)
+    .save().then((user) => user.toObject());
 export const updateUrlById = (id: string, values: Record<string, any>) => UrlModel.findByIdAndUpdate(id, values);

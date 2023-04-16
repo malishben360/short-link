@@ -40,7 +40,7 @@ export const encodeURI = (longURL: string) => {
 export const extractEncoded = (shortURL: string) => {
 
     // Extract the encoded characters from the long URL
-    const encoded = shortURL.replace(/^https:\/\/example.com\//, "");
+    const encoded = shortURL.replace(/^http:\/\/localhost:9000\/api\/v1\//, "");
 
     return encoded;
 }

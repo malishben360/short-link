@@ -16,5 +16,6 @@ export {
     getUrlById,
     getUrlByEncoded,
     deletUrlById,
+    createUrl,
     updateUrlById,
  } from './models/UrlModel';
