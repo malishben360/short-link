@@ -18,7 +18,8 @@ export const UrlModel = mongoose.model('Url', UrlSchema);
 
 /**Url model actions */
 export const getUrls = () => UrlModel.find();
-export const getUrlsByUserId = (userId: string) => UrlModel.find({user_id: userId});
+export const getUrlsByUserId = (userId: string) => UrlModel.find({ user_id: userId });
 export const getUrlById = (id: string) => UrlModel.findById(id);
-export const deletUrlById = (id: string) => UrlModel.findOneAndDelete({_id: id});
+export const getUrlByEncoded = (encoded: string) => UrlModel.findOne({ encoded });
+export const deletUrlById = (id: string) => UrlModel.findOneAndDelete({ _id: id });
 export const updateUrlById = (id: string, values: Record<string, any>) => UrlModel.findByIdAndUpdate(id, values);

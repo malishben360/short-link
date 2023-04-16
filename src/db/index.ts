@@ -1,3 +1,4 @@
+/** User actions */
 export { 
     getUsers,
     getUserByEmail,
@@ -7,3 +8,13 @@ export {
     deleteUserById,
     updateUserById
 } from './models/UserModel';
+
+/** Url actions */
+export { 
+    getUrls,
+    getUrlsByUserId,
+    getUrlById,
+    getUrlByEncoded,
+    deletUrlById,
+    updateUrlById,
+ } from './models/UrlModel';
