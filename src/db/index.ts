@@ -9,7 +9,7 @@ export {
     updateUserById
 } from './models/UserModel';
 
-/** Url actions */
+/** URL actions */
 export { 
     getURLs,
     getURLsByUserId,
@@ -20,3 +20,10 @@ export {
     createURL,
     updateURLById,
  } from './models/UrlModel';
+
+ /** URL stat actions */
+ export {
+    getURLStats,
+    getURLStatsByURLId,
+    createURLStat
+ } from './models/UrlStatModel';

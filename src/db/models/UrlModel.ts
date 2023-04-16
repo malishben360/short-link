@@ -16,7 +16,7 @@ const URLSchema = new mongoose.Schema(
 
 export const URLModel = mongoose.model('Url', URLSchema);
 
-/**Url model actions */
+/**URL model actions */
 export const getURLs = () => URLModel.find();
 export const getURLsByUserId = (user_id: string) => URLModel.find({ user_id });
 export const getURLById = (id: string) => URLModel.findById(id);
