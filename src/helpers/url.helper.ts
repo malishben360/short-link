@@ -38,10 +38,10 @@ export const getReferrers = (stats: Array<any>) => {
 /** Encoded character creator
  * Return: encoded characters
  */
-export const encodeURL = (longURL: string) => {
+export const encodeURL = (longURL: string, userId: string) => {
 
     // Hash the long URL using SHA256 to get an integer value
-    const updatedURL = longURL.concat(Date.now().toString());
+    const updatedURL = longURL.concat(userId);
     const hash = crypto.createHash("sha256").update(updatedURL).digest("hex");
     const rand = parseInt(hash, 16);
     // Convert the random number to base-62 using CHARSET

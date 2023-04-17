@@ -34,7 +34,7 @@ export const encodeLongURL = async (req: express.Request, res: express.Response)
         }
 
         /** Get short URL code */
-        const encoded = encodeURL(longURL);
+        const encoded = encodeURL(longURL, userId);
 
         /** Ensure no duplicate long URL for same user.
          * Return the if exist.

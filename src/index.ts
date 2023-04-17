@@ -37,7 +37,7 @@ server.listen(port, ()=> {
  * If you are connection to a live cluster
  * change the url to the live cluster url.
  */
-const MONGODB_URL = process.env.MONGODB_URL || 'mongodb://127.0.0.1:27017/UrlShrinkDB';
+const MONGODB_URL = process.env.MONGODB_URL || 'mongodb://127.0.0.1:27017/ShortLinkDB';
 
 /** Sync mongoose Promise with node's Promise
  * and connect to the local mongoDB.
@@ -54,3 +54,5 @@ app.get("/", (req: express.Request, res: express.Response) => {
   
 /* Telling the server to use the routes in the router object. */
 app.use('/api/v1/', router());
+
+export default app;
