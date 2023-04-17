@@ -18,7 +18,7 @@ app.use(cors({
 app.use(compression());
 app.use(cookieParser());
 app.use(bodyParser.json());
-app.set('trust proxy', true);
+app.set('trust proxy', true); //For proxy IPs use by true ip middleware 
 
 const server = http.createServer(app);
 
@@ -33,15 +33,20 @@ server.listen(port, ()=> {
  * If you are connection to a live cluster
  * change the url to the live cluster url.
  */
-const MONGO_URL = 'mongodb://127.0.0.1:27017/UrlShrinkDB';
+const MONGODB_URL = process.env.MONGODB_URL || 'mongodb://127.0.0.1:27017/UrlShrinkDB';
 
 /** Sync mongoose Promise with node's Promise
  * and connect to the local mongoDB.
  */
 mongoose.Promise = Promise;
-mongoose.connect(MONGO_URL);
+mongoose.connect(MONGODB_URL);
 mongoose.connection.on('open', ()=> console.log('Database Connected...'));
 mongoose.connection.on('error', (error: Error) => console.log(error));
 
-/** Routes entry point */
+/** This is the root route. It is used to check if the server is running. */
+app.get("/", (req: express.Request, res: express.Response) => {
+    res.status(200).json({ alive: "True" });
+  });
+  
+/* Telling the server to use the routes in the router object. */
 app.use('/api/v1/', router());
