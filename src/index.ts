@@ -1,3 +1,4 @@
+import * as dotenv from 'dotenv';
 import express from 'express';
 import http from 'http';
 import bodyParser from 'body-parser';
@@ -6,6 +7,9 @@ import compression from 'compression';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import router from './routes';
+
+/** Expose environment viriables */
+dotenv.config();
 
 const app = express();
 

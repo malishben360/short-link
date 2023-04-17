@@ -3,10 +3,10 @@ import crypto from 'crypto';
 /** Define hosting domain
  * Default: http://short.est
 */
-export const DOMAIN = process.env.DOMAIN || 'http://short.est/';
+const DOMAIN_NAME = process.env.DOMAIN_NAME || 'http://short.est/';
 
 /** Define character set for encoding (A-Z, a-z, 0-9) */
-const CHARSET = process.env.CHARSET || "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+const CHARSET = process.env.CHARSET || 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
 /** Return total clicks */
 export const getClicks = (stats: Array<any>) => {
@@ -62,7 +62,7 @@ export const encodeURL = (longURL: string) => {
 export const extractEncoded = (shortURL: string) => {
 
     // Extract the encoded characters from the long URL
-    const encoded = shortURL.replace(DOMAIN, "");
+    const encoded = shortURL.replace(DOMAIN_NAME, "");
 
     return encoded;
 }

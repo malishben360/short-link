@@ -7,5 +7,5 @@ export {
     getReferrers,
     randomCountry,
     randomReferrers,
-    extractDomainFromReferrer, 
-    DOMAIN } from './url.helper';
+    extractDomainFromReferrer
+} from './url.helper';

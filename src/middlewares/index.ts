@@ -27,7 +27,8 @@ export const isOwner = async (req: express.Request, res: express.Response, next:
 export const isAuthenticated = async (req: express.Request, res: express.Response, next: NextFunction) => {
     try{
         /** Check if cookie is set */
-        const sessionToken = req.cookies['INDICINA-AUTH'];
+        const COOKIE_NAME = process.env.COOKIE_NAME || 'INDICINA-AUTH'
+        const sessionToken = req.cookies[COOKIE_NAME];
         if(!sessionToken){
             return res.status(403).send('Cookie not found');
         }

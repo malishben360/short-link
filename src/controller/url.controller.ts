@@ -12,7 +12,6 @@ import {
 import { 
     encodeURL,
     extractEncoded,
-    DOMAIN,
     getClicks,
     getCountries,
     getReferrers,
@@ -71,6 +70,7 @@ export const encodeLongURL = async (req: express.Request, res: express.Response)
 export const decodeShortURL = async (req: express.Request, res: express.Response) => {
     try {
         const { shortURL } = req.body;
+        const DOMAIN_NAME = process.env.DOMAIN_NAME || 'http://short.est/';
 
         /** On live server true remote IP Address and country can be grap
          * by these commented line of codes 77 - 83
@@ -86,7 +86,7 @@ export const decodeShortURL = async (req: express.Request, res: express.Response
 
 
         /** Check for short URL */
-        if (!shortURL || !(shortURL.startsWith(DOMAIN))) {
+        if (!shortURL || !(shortURL.startsWith(DOMAIN_NAME))) {
             return res.status(400).send('URL sanitization');
         }
 
