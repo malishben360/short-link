@@ -3,10 +3,10 @@ import crypto from 'crypto';
 /** Define hosting domain
  * Default: http://short.est
 */
-export const DOMAIN = process.env.SECRET || 'http://short.est/';
+export const DOMAIN = process.env.DOMAIN || 'http://short.est/';
 
 /** Define character set for encoding (A-Z, a-z, 0-9) */
-const CHARSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+const CHARSET = process.env.CHARSET || "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
 /** Return total clicks */
 export const getClicks = (stats: Array<any>) => {
@@ -66,3 +66,34 @@ export const extractEncoded = (shortURL: string) => {
 
     return encoded;
 }
+
+export const extractDomainFromReferrer = (referrer: string ) => {
+    const referrerUrl = new URL(referrer);
+    const domain = referrerUrl.hostname;
+    return domain;
+}  
+
+/** These fake values are generate because the app is runing
+ * locally and it can't access remote IP addresses.
+ * The implementation is commented for true IP addresses.
+ */
+
+/** Fake countries */
+export const randomCountry = () => {
+    const countries = ['US', 'SWZ', 'TUR', 'USA', 'GBR', 'NGA'];
+    const rand = Math.ceil(Math.random() * 5);
+    return countries[rand];
+};
+/** Fake referrers */
+export const randomReferrers = () => {
+    const referrers = [
+        'https:indicina.co',
+        'https://google.com',
+        'https://linkedin.com', 
+        'https://twitter.com', 
+        'https://instangram.com', 
+        'https://tylara.com'
+    ];
+    const rand = Math.ceil(Math.random() * 5);
+    return referrers[rand];
+};

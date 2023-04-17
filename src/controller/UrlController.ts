@@ -1,6 +1,7 @@
 import express from 'express';
 import { get } from 'lodash';
 import ip from 'ip';
+//import geoip from 'geoip-lite';
 import { 
     createURL, 
     createURLStat, 
@@ -14,7 +15,10 @@ import {
     DOMAIN,
     getClicks,
     getCountries,
-    getReferrers
+    getReferrers,
+    randomCountry,
+    randomReferrers,
+    extractDomainFromReferrer
 } from '../helpers';
 
 export const encodeLongURL = async (req: express.Request, res: express.Response) => {
@@ -68,8 +72,17 @@ export const decodeShortURL = async (req: express.Request, res: express.Response
     try {
         const { shortURL } = req.body;
 
-        //const clientIP = get(req, 'clientIP'); //this is for a remote servers
-        const clientIP = ip.address(); //this is for a local server
+        /** On live server true remote IP Address and country can be grap
+         * by these commented line of codes 77 - 83
+         */
+        //const clientIP = get(req, 'clientIP');
+        // const geo = geoip.lookup(clientIP);
+        // const country = geo.country;
+
+        //const referrer = req.get("Referrer"); // Get the referrer header from the request object
+        //const domain = extractDomainFromReferrer(referrer);
+
+        const localClientIP = ip.address(); //this is for a local server
 
 
         /** Check for short URL */
@@ -86,9 +99,16 @@ export const decodeShortURL = async (req: express.Request, res: express.Response
             return res.sendStatus(404);
         }
 
-        const urlStat = await createURLStat({
-            url_id: url.user_id.toString(),
-            ip_address: clientIP,
+        /** On live server 
+         * change randomCountry() to country.
+         * change randomReferrers() to domain.
+         * change localClientIp to clientIP.
+         */
+        await createURLStat({
+            url_id: url._id.toString(),
+            ip_address: localClientIP,
+            country: randomCountry(),
+            referrer: randomReferrers()
         });
 
         return res.status(200).json({ longURL: url.long_url }).end();
@@ -98,7 +118,7 @@ export const decodeShortURL = async (req: express.Request, res: express.Response
     }
 }
 
-export const getURLStats = async (req: express.Request, res: express.Response) => {
+export const computeURLStats = async (req: express.Request, res: express.Response) => {
     try{
         const { url_path } = req.params;
         
