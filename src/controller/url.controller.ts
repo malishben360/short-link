@@ -8,7 +8,7 @@ import {
     getURLByEncoded, 
     getURLByURL, 
     getURLStatsByURLId 
-} from '../db';
+} from '../models';
 import { 
     encodeURL,
     extractEncoded,

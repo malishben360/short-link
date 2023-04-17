@@ -1,5 +1,5 @@
-import { isAuthenticated, trueIPAdress } from '../../middleware';
-import { encodeLongURL, decodeShortURL, computeURLStats } from '../../controller/UrlController';
+import { isAuthenticated, trueIPAdress } from '../../middlewares';
+import { encodeLongURL, decodeShortURL, computeURLStats } from '../../controller/url.controller';
 import express from 'express';
 
 export default (router: express.Router) => {

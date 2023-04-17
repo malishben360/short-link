@@ -1,4 +1,4 @@
-import { getUserBySessionToken } from '../db';
+import { getUserBySessionToken } from '../models';
 import express, { NextFunction } from 'express';
 import { get, merge } from 'lodash';
 

@@ -7,7 +7,7 @@ export {
     createUser,
     deleteUserById,
     updateUserById
-} from './models/UserModel';
+} from './user.model';
 
 /** URL actions */
 export { 
@@ -19,11 +19,11 @@ export {
     deletURLById,
     createURL,
     updateURLById,
- } from './models/UrlModel';
+ } from './url.model';
 
  /** URL stat actions */
  export {
     getURLStats,
     getURLStatsByURLId,
     createURLStat
- } from './models/UrlStatModel';
+ } from './urlstat.model';
