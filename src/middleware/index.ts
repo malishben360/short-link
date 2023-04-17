@@ -47,3 +47,10 @@ export const isAuthenticated = async (req: express.Request, res: express.Respons
         return res.sendStatus(400);
     }
 }
+
+/** Get the true IP address of a visitor */
+export const trueIPAdress = (req: express.Request, res: express.Response, next: NextFunction) => {
+    const ipAddress = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+    merge(req, {clientIP: ipAddress})
+    return next();
+}

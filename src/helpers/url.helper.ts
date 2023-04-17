@@ -15,12 +15,24 @@ export const getClicks = (stats: Array<any>) => {
 
 /** Return array of countries the short url is click from */
 export const getCountries = (stats: Array<any>) => {
-    return stats.map((stat) => stat.country)
+    let countries = stats.reduce((prev, curr) => {
+        let country = curr.country
+        if (!prev[country]) prev[country] = 1
+        else prev[country]++
+        return prev
+    }, {});
+    return countries;
 }
 
 /** Return array of domains the short url is click from */
 export const getReferrers = (stats: Array<any>) => {
-    return stats.map((stat) => stat.referrer)
+    let referrers = stats.reduce((prev, curr) => {
+        let domain = curr.referrer
+        if (!prev[domain]) prev[domain] = 1
+        else prev[domain]++
+        return prev
+    }, {});
+    return referrers;
 }
 
 /** Encoded character creator
