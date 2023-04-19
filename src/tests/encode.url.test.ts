@@ -23,7 +23,7 @@ describe('GET /encode', () => {
     /** Simulate user authentication */
     agent = request.agent(app);
     const response = await agent.post('/api/v1/auth/login').send({
-      email: 'malish@gmail.com', password: '12345'
+      email: 'malish@indicina.co', password: '12345'
     });
     const cookie = response.header['set-cookie'][0];
     agent.set('Cookie', cookie);

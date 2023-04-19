@@ -3,21 +3,13 @@ ShortLink V1.0.0 is a URL shortening service that allows you to create short, ea
 ### The project is for assessment purpose.
 
 ## Technologies Used
-|   Name    |  Version  |
-|-----------|-----------|
-|  Node.js  |  v18.16.0 |
-|TypeScript |  v5.0.4   |
-| Express.js| v4.18.2   |
-| Mongoose/MongoDB | v7.0.3 |
-| Jest             | v29.5.0 |
-
-## Getting Started
-To get started with ShortLink, follow these steps:
-
-1. Clone this repository to your local machine using git clone [https://github.com/your-username/short-link.git](https://github.com/your-username/short-link).
-2. Install the required dependencies using npm install
-3. Create a .env file in the root of the project and fill in the required environment variables. See .env.example for an example configuration or rename the file to .env.
-4. Start the server using npm run start
+|         Name      |       Version    |
+|-------------------|------------------|
+|  Node.js          |  v18.16.0        |
+|  TypeScript       |  v5.0.4          |
+|  Express.js       |  v4.18.2         |
+|  Mongoose/MongoDB |  v7.0.3          |
+|  Jest             |  v29.5.0         |
 
 ## Project Structure
 The [`ShortLink`](https://github.com/your-username/short-link) project has the following directory structure:
@@ -78,25 +70,26 @@ short-link/
 * `src/routes/index.ts`: Combines all the routes into one router
 * `src/tests`: Contains the Jest tests for the application
 * `src/index.ts`: The entry point of the application
-* `Short_Link_Indicina_Assessment.postman_collection.json`: Contains a collection of HTTP requests I used to test the API endpoints of the project.
+* `postman_collection.json`: Contains a collection of HTTP requests I used to test the API endpoints of the project.
 
 ## API Endpoints
 ShortLink provides the following API endpoints:
 
 |   End Point |               Payload Sample     |                     Function                  |
-|---------------------------|----------------------------------------|--------------------------------------------|
-|POST `/api/v1/auth/register`      |{username:'malish',email:'malish@indicina.co',password:'12345'} |Registers a new user with the application |
-|POST `/api/v1/auth/login`         |{email: 'malish@indicina.com', password: '12345' }              |Logs in a user and setup cookie           |
-|POST `/api/v1/encode`             |{ longURL:'https://indicina.co' }                               |Encodes a long URL into a short URL       |
-|GET `/api/v1/decode`              |{ shortURL:'http://short.est/' }                                |Decodes a short URL into a long URL       |
+|---------------------------|----------------------------------------|---------------------------------------------------|
+|POST `/api/v1/auth/register`      |{ username: "malish", email: "malish@indicina.co", password: "12345" } |Registers a new user with the application |
+|POST `/api/v1/auth/login`         |{ email: "malish@indicina.com", password: "12345" }              |Logs in a user and setup cookie           |
+|POST `/api/v1/encode`             |{ longURL: "https://indicina.co" }                               |Encodes a long URL into a short URL       |
+|GET `/api/v1/decode`              |{ shortURL: "http://short.est/" }                                |Decodes a short URL into a long URL       |
 |GET `/api/v1/statistic/:url_path` |                                                            |Gets the statistics for a particular short URL|
 
+## Getting Started
+To get started with ShortLink, follow these steps:
 
-
-## MongoDB Cluster Setup
+### MongoDB Cluster Setup
 To set up a MongoDB cluster for ShortLink, follow these steps:
 
-1. [`First, create a MongoDB account or log in`](https://account.mongodb.com/account/login).
+1. First, create a [`MongoDB account or login`](https://account.mongodb.com/account/login).
 2. Then create a new project. Give it a name and press the Next button.
 3. Then click Create Project after that.
 4. Create a database in the next window by selecting a cloud provider, a location, and specs. So press `Build a Database` to get going.
@@ -111,9 +104,19 @@ You will receive a URI string after the database is set up, which you will use t
 #### `mongodb+srv://<YOUR_USERNAME>:<YOUR_PASSWORD>@<YOUR_CLUSTER_URL>/<DATABASE_NAME>?retryWrites=true&w=majority`
 Put this string on line 5 of .env file.
 
-## Testing
-To run the tests for ShortLink, Create the a new user with the above sample payload via the register end point, and use the command `npm run test`.
-This will run all the Jest tests in the src/tests directory and give you a report of the test results.
+### Note:
+You can install mongoDB locally using this [`guide`](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-windows/)
+
+### Clone the repository
+1. Clone this repository to your local machine using git clone [https://github.com/your-username/short-link.git](https://github.com/your-username/short-link.git).
+2. Install the required dependencies using npm install
+3. Create a .env file in the root of the project and fill in the required environment variables. See .env.example for an example configuration or rename the file to .env.
+4. Start the server using npm run start
+
+### Testing
+To run the tests for ShortLink, Create a new user with the above sample payload via the register end point, and use the command `npm run test`.
+This will run all the Jest tests in the src/tests directory and give you a report of the test results. 
+#### Note: make sure a user with email address malish@indicina.co and password 12345 is created before runing the tests.
 
 ## Sugestions and Contributions
 The project main objective is to make three API endpoints available:

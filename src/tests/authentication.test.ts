@@ -22,7 +22,7 @@ describe('POST /auth/register', () => {
     test('should return 409 if user already exists', async () => {
       const existingUser = {
         username: 'malish',
-        email: 'malish@gmail.com',
+        email: 'malish@indicina.co',
         password: '12345',
       };
 
@@ -44,7 +44,7 @@ describe('POST /auth/register', () => {
 describe('POST /auth/login', () => {
     test('The user is login to the system', async () => {
       const user = {
-        email: 'malish@gmail.com', 
+        email: 'malish@indicina.co', 
         password: '12345'
       }
       const response = await request(app)
