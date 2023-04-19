@@ -8,8 +8,8 @@ const URLSchema = new mongoose.Schema(
     },
     {
         timestamps: {
-            createdAt: 'created-at',
-            updatedAt: 'updated-at'
+            createdAt: 'created_at',
+            updatedAt: 'updated_at'
         }
     }
 );
@@ -20,8 +20,8 @@ export const URLModel = mongoose.model('Url', URLSchema);
 export const getURLs = () => URLModel.find();
 export const getURLsByUserId = (user_id: string) => URLModel.find({ user_id });
 export const getURLById = (id: string) => URLModel.findById(id);
-export const getURLByEncoded = (encoded: string) => URLModel.findOne({ encoded });
-export const getURLByURL = (userId: string, longURL: string) => URLModel.findOne({ long_url: longURL, user_id: userId });
+export const getURLByCode = (encoded: string) => URLModel.findOne({ encoded });
+export const getLongURLByUserAndURL = (userId: string, longURL: string) => URLModel.findOne({ long_url: longURL, user_id: userId });
 export const deletURLById = (id: string) => URLModel.findOneAndDelete({ _id: id });
 export const createURL = (values: Record<string, any>) => new URLModel(values)
     .save().then((url) => url.toObject());

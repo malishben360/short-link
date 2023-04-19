@@ -8,8 +8,8 @@ const URLStatSchema = new mongoose.Schema({
     },
     {
         timestamps: {
-            createdAt: 'created-at',
-            updatedAt: 'updated-at'
+            createdAt: 'created_at',
+            updatedAt: 'updated_at'
         }
     }
 );
@@ -18,7 +18,7 @@ const URLStatModel = mongoose.model('Url_stat', URLStatSchema);
 
 /** URL Stat actions */
 export const getURLStats = () => URLStatModel.find();
-export const getURLStatsByURLId = (urlId: string) => URLStatModel.find({ url_id: urlId });
+export const getURLStatisticByURLId = (urlId: string) => URLStatModel.find({ url_id: urlId });
 export const createURLStat = (values: Record<string, any>) => new URLStatModel(values).save()
     .then((urlStat) => urlStat.toObject());
 export const clearURLStats = () => URLStatModel.deleteMany();

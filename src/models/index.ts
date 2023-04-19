@@ -14,8 +14,8 @@ export {
     getURLs,
     getURLsByUserId,
     getURLById,
-    getURLByEncoded,
-    getURLByURL,
+    getURLByCode,
+    getLongURLByUserAndURL,
     deletURLById,
     createURL,
     updateURLById,
@@ -24,6 +24,6 @@ export {
  /** URL stat actions */
  export {
     getURLStats,
-    getURLStatsByURLId,
+    getURLStatisticByURLId,
     createURLStat
  } from './urlstat.model';

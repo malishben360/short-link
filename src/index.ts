@@ -11,7 +11,7 @@ import router from './routes';
 /** Expose environment viriables */
 dotenv.config();
 
-const app = express();
+export const app = express();
 
 /** Authentication purpose */
 app.use(cors({
@@ -24,13 +24,13 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.set('trust proxy', true); //For proxy IPs use by true ip middleware 
 
-const server = http.createServer(app);
+export const server = http.createServer(app);
 
 const port = process.env.PORT || 9000;
 
 /**Server listening at port 9000 by default if port environment variable is null */
 server.listen(port, ()=> {
-    console.log("Server listening at port: ", port); 
+    console.log('speak to me lord, your server is listening!'); 
 })
 
 /** Mongo Database connection url
@@ -44,7 +44,6 @@ const MONGODB_URL = process.env.MONGODB_URL || 'mongodb://127.0.0.1:27017/ShortL
  */
 mongoose.Promise = Promise;
 mongoose.connect(MONGODB_URL);
-mongoose.connection.on('open', ()=> console.log('Database Connected...'));
 mongoose.connection.on('error', (error: Error) => console.log(error));
 
 /** This is the root route. It is used to check if the server is running. */
@@ -54,5 +53,3 @@ app.get("/", (req: express.Request, res: express.Response) => {
   
 /* Telling the server to use the routes in the router object. */
 app.use('/api/v1/', router());
-
-export default app;

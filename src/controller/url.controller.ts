@@ -5,41 +5,42 @@ import ip from 'ip';
 import { 
     createURL, 
     createURLStat, 
-    getURLByEncoded, 
-    getURLByURL, 
-    getURLStatsByURLId 
+    getURLByCode, 
+    getLongURLByUserAndURL, 
+    getURLStatisticByURLId 
 } from '../models';
 import { 
-    encodeURL,
-    extractEncoded,
-    getClicks,
-    getCountries,
-    getReferrers,
-    randomCountry,
-    randomReferrers,
-    extractDomainFromReferrer
+    generateShortCode,
+    extractEncodedComponent,
+    getVisites,
+    getCountryVisitsFromUrlPath,
+    getReferrerDomains,
+    generateRandomCountryCode,
+    generateRandomReferrer,
+    extractDomainFromReferrer,
+    isValidURL,
+    getLastVisitedAt
 } from '../helpers';
 
 export const encodeLongURL = async (req: express.Request, res: express.Response) => {
     try{
         const { longURL } = req.body;
-        let userId = get(req, 'identity._id') as string;
         
-        /** Convert userId to string literals */
+        /** Check for long URL */
+        if (!longURL || !isValidURL(longURL)) {
+            return res.sendStatus(400);
+        }
+        
+        let userId = get(req, 'identity._id') as string;
         userId = userId.toString();
 
-        /** Check for long URL */
-        if (!longURL) {
-            return res.status(400).send('Long URL is missing');
-        }
-
         /** Get short URL code */
-        const encoded = encodeURL(longURL, userId);
+        const encoded = generateShortCode(longURL, userId);
 
-        /** Ensure no duplicate long URL for same user.
-         * Return the if exist.
+        /** It keeps track of previously generated codes to avoid collisions
+         *  with existing ones in the database. 
          */
-        const existingLongURL = await getURLByURL(userId, longURL);
+        const existingLongURL = await getLongURLByUserAndURL(userId, longURL);
         if (existingLongURL) {
             return res.status(200).json({ 
                 shortURL: `http://short.est/${ existingLongURL.encoded }` 
@@ -52,9 +53,9 @@ export const encodeLongURL = async (req: express.Request, res: express.Response)
             user_id: userId
         });
 
-        /** URL is no created */
+        /** URL is not created */
         if (!shortURL){
-            return res.sendStatus(500);
+            return res.sendStatus(422);
         }
 
         return res.status(201).json({
@@ -62,7 +63,7 @@ export const encodeLongURL = async (req: express.Request, res: express.Response)
         }).end();
     } catch (error) {
         console.log("Error: ", error);
-        return res.status(400).send('Database operation failed');
+        return res.sendStatus(400);
     }
     
 }
@@ -70,7 +71,13 @@ export const encodeLongURL = async (req: express.Request, res: express.Response)
 export const decodeShortURL = async (req: express.Request, res: express.Response) => {
     try {
         const { shortURL } = req.body;
+
+        /** Check for short URL */
         const DOMAIN_NAME = process.env.DOMAIN_NAME || 'http://short.est/';
+        if (!shortURL || !(shortURL.startsWith(DOMAIN_NAME))) {
+            return res.sendStatus(400);
+        }
+
 
         /** On live server true remote IP Address and country can be grap
          * by these commented line of codes 77 - 83
@@ -85,16 +92,12 @@ export const decodeShortURL = async (req: express.Request, res: express.Response
         const localClientIP = ip.address(); //this is for a local server
 
 
-        /** Check for short URL */
-        if (!shortURL || !(shortURL.startsWith(DOMAIN_NAME))) {
-            return res.status(400).send('URL sanitization');
-        }
 
-        /** Get extract encoded from short URL*/
-        const encoded = extractEncoded(shortURL);
+        /** Get extract encoded component from short URL*/
+        const encoded = extractEncodedComponent(shortURL);
 
         /** Check if URL exist */
-        const url = await getURLByEncoded(encoded);
+        const url = await getURLByCode(encoded);
         if (!url) {
             return res.sendStatus(404);
         }
@@ -107,8 +110,8 @@ export const decodeShortURL = async (req: express.Request, res: express.Response
         await createURLStat({
             url_id: url._id.toString(),
             ip_address: localClientIP,
-            country: randomCountry(),
-            referrer: randomReferrers()
+            country: generateRandomCountryCode(),
+            referrer: generateRandomReferrer()
         });
 
         return res.status(200).json({ longURL: url.long_url }).end();
@@ -118,31 +121,36 @@ export const decodeShortURL = async (req: express.Request, res: express.Response
     }
 }
 
-export const computeURLStats = async (req: express.Request, res: express.Response) => {
+export const computeURLStatistics = async (req: express.Request, res: express.Response) => {
     try{
         const { url_path } = req.params;
         
-        /** Check for encoded */
+        /** Check for encoded component */
         if (!url_path) {
             return res.sendStatus(400);
         }
 
-        const url = await getURLByEncoded(url_path);
+        const url = await getURLByCode(url_path);
+
+        /** Check for URL */
         if (!url) {
-            return res.sendStatus(404);
+            return res.status(404).json().end();
         }
 
         const urlId = url._id.toString();
-        const urlStats = await getURLStatsByURLId(urlId);
+        const urlStats = await getURLStatisticByURLId(urlId);
 
-        const clicks = getClicks(urlStats);
-        const countries = getCountries(urlStats);
-        const referrers = getReferrers(urlStats);
+        const visites = getVisites(urlStats);
+        const lastVisitedAt = getLastVisitedAt(urlStats) || '0000-00-00T00:00:00.000+00:00';
+        const countries = getCountryVisitsFromUrlPath(urlStats);
+        const referrers = getReferrerDomains(urlStats);
 
         return res.status(200).json({
-            clicks,
+            longURL: url.long_url,
+            visites,
             countries,
-            referrers
+            referrers,
+            lastVisitedAt
         }).end();
     } catch (error) {
         console.log("Error: ", error);

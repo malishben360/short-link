@@ -4,22 +4,23 @@ import { random, authentication } from '../helpers';
 
 export const login = async (req: express.Request, res: express.Response) => {
     try{
+        const COOKIE_NAME = process.env.COOKIE_NAME || 'INDICINA-AUTH';
         /** check if the correct json object is send */
         const { email, password } = req.body;
         if (!email || !password){
-            return res.status(400).send("Required inputs");
+            return res.sendStatus(400);
         }
 
         /** Check if user with this email exist */
         const user = await getUserByEmail(email).select('+authentication.salt +authentication.password');
         if(!user){
-            return res.status(400).send("No record");
+            return res.sendStatus(401);
         }
 
         /**Authenticate user*/
         const expectedHash = authentication(user.authentication.salt, password);
         if(user.authentication.password !== expectedHash){
-            return res.status(403).send('Wrong password');
+            return res.sendStatus(401);
         }
 
         /** Set user session and cookie */
@@ -27,7 +28,7 @@ export const login = async (req: express.Request, res: express.Response) => {
         user.authentication.sessionToken = authentication(salt, user._id.toString());
         await user.save();
 
-        res.cookie('INDICINA-AUTH', user.authentication.sessionToken, { domain: 'localhost', path: '/'});
+        res.cookie(COOKIE_NAME, user.authentication.sessionToken, { domain: 'localhost', path: '/'});
 
         return res.status(200).json(user).end();
     } catch(error){
@@ -49,7 +50,7 @@ export const register = async (req: express.Request, res: express.Response) => {
 
         /** If user exist send bad request status */
         if(existingUser){
-            return res.sendStatus(400);
+            return res.status(409).send('User already exists');
         }
 
         /** All requirements passed */

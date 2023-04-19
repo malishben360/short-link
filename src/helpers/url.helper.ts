@@ -8,13 +8,19 @@ const DOMAIN_NAME = process.env.DOMAIN_NAME || 'http://short.est/';
 /** Define character set for encoding (A-Z, a-z, 0-9) */
 const CHARSET = process.env.CHARSET || 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
-/** Return total clicks */
-export const getClicks = (stats: Array<any>) => {
+/** Return total visites */
+export const getVisites = (stats: Array<any>) => {
     return stats.length;
 }
 
+/** Return last visited */
+export const getLastVisitedAt = (stats: Array<any>) => {
+    const sortedByCreatedAt = stats.sort((a, b) => b.created_at - a.created_at);
+    return sortedByCreatedAt.length > 0 ? sortedByCreatedAt[0].created_at : null;
+}
+
 /** Return array of countries the short url is click from */
-export const getCountries = (stats: Array<any>) => {
+export const getCountryVisitsFromUrlPath = (stats: Array<any>) => {
     let countries = stats.reduce((prev, curr) => {
         let country = curr.country
         if (!prev[country]) prev[country] = 1
@@ -24,8 +30,8 @@ export const getCountries = (stats: Array<any>) => {
     return countries;
 }
 
-/** Return array of domains the short url is click from */
-export const getReferrers = (stats: Array<any>) => {
+/** Return array of domains the short url visited from */
+export const getReferrerDomains = (stats: Array<any>) => {
     let referrers = stats.reduce((prev, curr) => {
         let domain = curr.referrer
         if (!prev[domain]) prev[domain] = 1
@@ -38,13 +44,13 @@ export const getReferrers = (stats: Array<any>) => {
 /** Encoded character creator
  * Return: encoded characters
  */
-export const encodeURL = (longURL: string, userId: string) => {
+export const generateShortCode = (longURL: string, userId: string) => {
 
-    // Hash the long URL using SHA256 to get an integer value
+    /** Hashes the provided long URL using the SHA256 algorithm to generate an integer value. */
     const updatedURL = longURL.concat(userId);
     const hash = crypto.createHash("sha256").update(updatedURL).digest("hex");
     const rand = parseInt(hash, 16);
-    // Convert the random number to base-62 using CHARSET
+
     let encoded = '';
     let remainder = rand;
     while (remainder > 0) {
@@ -56,36 +62,38 @@ export const encodeURL = (longURL: string, userId: string) => {
     return encoded.slice(0, 6);
 }
 
-/** Encoded  characters extractor
- * Return: encoded characters
- */
-export const extractEncoded = (shortURL: string) => {
-
-    // Extract the encoded characters from the long URL
+/** Extracts the encoded component from a URL string */
+export const extractEncodedComponent = (shortURL: string) => {
     const encoded = shortURL.replace(DOMAIN_NAME, "");
-
     return encoded;
 }
 
+/** Validate URL */
+export const isValidURL = (url: string) => {
+    try {
+      new URL(url);
+      return true;
+    } catch {
+      return false;
+    }
+}
+
+/** Extracts the domain name from a referrer URL. */
 export const extractDomainFromReferrer = (referrer: string ) => {
     const referrerUrl = new URL(referrer);
     const domain = referrerUrl.hostname;
     return domain;
 }  
 
-/** These fake values are generate because the app is runing
- * locally and it can't access remote IP addresses.
- * The implementation is commented for true IP addresses.
- */
-
-/** Fake countries */
-export const randomCountry = () => {
+/** Returns a randomly selected country code from a list of country codes. */
+export const generateRandomCountryCode = () => {
     const countries = ['US', 'SWZ', 'TUR', 'USA', 'GBR', 'NGA'];
     const rand = Math.ceil(Math.random() * 5);
     return countries[rand];
 };
-/** Fake referrers */
-export const randomReferrers = () => {
+
+/** Generates a random HTTP referrer URL string, simulating a user coming from an external website. */
+export const generateRandomReferrer = () => {
     const referrers = [
         'https:indicina.co',
         'https://google.com',

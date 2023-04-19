@@ -28,7 +28,7 @@ export const deleteUser = async (req: express.Request, res: express.Response) =>
             return res.sendStatus(417);
         }
         
-        return res.status(200).json(deletedUser).end();
+        return res.status(204).json(deletedUser).end();
     } catch(error){
         console.log("Error: ", error);
         return res.sendStatus(400);
@@ -45,15 +45,15 @@ export const updateUser = async (req: express.Request, res: express.Response) =>
             return res.sendStatus(400);
         }
 
-        const updatedUser = await getUserById(id);
+        const user = await getUserById(id);
 
         /** Check for user */
-        if(!updatedUser){
-            return res.sendStatus(400);
+        if(!user){
+            return res.sendStatus(404);
         }
 
-        updatedUser.username = username;
-        await updatedUser.save();
+        user.username = username;
+        const updatedUser = await user.save();
 
         return res.status(200).json(updatedUser).end();
     } catch(error){

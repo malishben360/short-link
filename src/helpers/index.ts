@@ -1,11 +1,13 @@
 export { random, authentication } from './auth.helper';
 export { 
-    encodeURL, 
-    extractEncoded, 
-    getClicks, 
-    getCountries, 
-    getReferrers,
-    randomCountry,
-    randomReferrers,
+    generateShortCode, 
+    extractEncodedComponent, 
+    getVisites,
+    getLastVisitedAt,
+    isValidURL, 
+    getCountryVisitsFromUrlPath, 
+    getReferrerDomains,
+    generateRandomCountryCode,
+    generateRandomReferrer,
     extractDomainFromReferrer
 } from './url.helper';

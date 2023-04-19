@@ -5,25 +5,28 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon",
-    "test": "cross-env NODE_ENV=test jest --testTimeout=5000"
+    "test": "cross-env NODE_ENV=test jest --runInBand --bail --testTimeout=5000"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@babel/preset-typescript": "^7.21.4",
+    "@jest/globals": "^29.5.0",
     "@types/body-parser": "^1.19.2",
     "@types/compression": "^1.7.2",
     "@types/cookie-parser": "^1.4.3",
     "@types/cors": "^2.8.13",
-    "@types/express": "^4.17.17",
-    "@types/mongoose": "^5.11.97",
     "@types/dotenv": "^8.2.0",
+    "@types/express": "^4.17.17",
     "@types/geoip-lite": "^1.4.1",
     "@types/ip": "^1.1.0",
     "@types/jest": "^29.5.0",
     "@types/lodash": "^4.14.194",
+    "@types/mongoose": "^5.11.97",
     "@types/supertest": "^2.0.12",
     "nodemon": "^2.0.22",
+    "ts-jest": "^29.1.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.4"
   },
