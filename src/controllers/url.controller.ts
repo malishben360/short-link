@@ -7,7 +7,9 @@ import {
     createURL, 
     createStatistic, 
     getURLByCode, 
-    getLongURLByUserIdAndURL, 
+    deleteURLById,
+    getLongURLByUserIdAndURL,
+    deleteStatisticsByURLId, 
 } from '../services';
 import { 
     generateShortCode,
@@ -113,5 +115,37 @@ export const decodeShortURL = async (req: express.Request, res: express.Response
     } catch (error) {
         console.log(error);
         return res.sendStatus(400);
+    }
+}
+
+export const deleteShortURL = async (req: express.Request, res: express.Response) => {
+    try{
+        const { url_path } = req.params;
+
+        /** Check if url_path is available */
+        if (!url_path) {
+            return res.sendStatus(400);
+        }
+
+        const shortURL = await getURLByCode(url_path);
+
+        /** Check if short URL is available */
+        if (!shortURL) {
+            return res.sendStatus(404);
+        }
+
+        const deletedURL = await deleteURLById(shortURL._id.toString());
+
+        if (!deletedURL) {
+            return res.sendStatus(500);
+        }
+
+        /** Clear  deleted short URL history */
+        await deleteStatisticsByURLId(deletedURL._id.toString());
+
+        return res.sendStatus(204);
+    } catch(error: any) {
+        console.log('Error: ', error);
+        res.sendStatus(400);
     }
 }
