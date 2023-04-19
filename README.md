@@ -21,11 +21,11 @@ To get started with ShortLink, follow these steps:
 
 ## Project Structure
 The [`ShortLink`](https://github.com/your-username/short-link) project has the following directory structure:
-
+``` bash
 short-link/
    ├── src/
    │   ├── controllers/
-   |    |   ├── authentication.controller.ts
+   |   |   ├── authentication.controller.ts
    |   |   ├── statistic.controller.ts
    |   |   ├── url.controller.ts
    |   |   └── user.controller.ts
@@ -64,8 +64,10 @@ short-link/
    ├── nodemon.json
    └── package.lock.json
    ├── package.json
+   ├── postman_collection.json
    ├── README.md
    └── tsconfig.json
+```
 
 * `src/controllers`: Contains the request handlers for each API endpoint
 * `src/helpers`: Contains helper functions used throughout the project
@@ -76,18 +78,13 @@ short-link/
 * `src/routes/index.ts`: Combines all the routes into one router
 * `src/tests`: Contains the Jest tests for the application
 * `src/index.ts`: The entry point of the application
+* `Short_Link_Indicina_Assessment.postman_collection.json`: Contains a collection of HTTP requests I used to test the API endpoints of the project.
 
 ## API Endpoints
 ShortLink provides the following API endpoints:
 
-* `/api/v1/auth/register`: Registers a new user with the application
-* `/api/v1/auth/login`: Logs in a user and set a cookie.
-* `/api/v1/encode`: Encodes a long URL into a short URL
-* `/api/v1/decode`: Decodes a short URL into a long URL
-* `/api/v1/statistic/:url_path`: Gets the statistics for a particular short URL
-
-|   End Point                      |  Payload Sample                                                |                Function                  |
-|----------------------------------|----------------------------------------------------------------|------------------------------------------|
+|   End Point |               Payload Sample     |                     Function                  |
+|---------------------------|----------------------------------------|--------------------------------------------|
 |POST `/api/v1/auth/register`      |{username:'malish',email:'malish@indicina.co',password:'12345'} |Registers a new user with the application |
 |POST `/api/v1/auth/login`         |{email: 'malish@indicina.com', password: '12345' }              |Logs in a user and setup cookie           |
 |POST `/api/v1/encode`             |{ longURL:'https://indicina.co' }                               |Encodes a long URL into a short URL       |
