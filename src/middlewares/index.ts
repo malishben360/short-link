@@ -1,8 +1,9 @@
-import { getUserBySessionToken } from '../models';
-import express, { NextFunction } from 'express';
+import * as express from 'express';
+
+import { getUserBySessionToken } from '../services';
 import { get, merge } from 'lodash';
 
-export const isOwner = async (req: express.Request, res: express.Response, next: NextFunction) => {
+export const isOwner = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     try{
         const { id } = req.params;
         const currentUserId = get(req, 'identity._id') as string;
@@ -24,7 +25,7 @@ export const isOwner = async (req: express.Request, res: express.Response, next:
     }
 }
 
-export const isAuthenticated = async (req: express.Request, res: express.Response, next: NextFunction) => {
+export const isAuthenticated = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     try{
         /** Check if cookie is set */
         const COOKIE_NAME = process.env.COOKIE_NAME || 'INDICINA-AUTH'
@@ -50,7 +51,7 @@ export const isAuthenticated = async (req: express.Request, res: express.Respons
 }
 
 /** Get the true IP address of a visitor */
-export const trueIPAdress = (req: express.Request, res: express.Response, next: NextFunction) => {
+export const trueIPAdress = (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const ipAddress = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
     merge(req, {clientIP: ipAddress})
     return next();

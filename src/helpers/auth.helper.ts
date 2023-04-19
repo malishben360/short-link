@@ -1,4 +1,4 @@
-import crypto from 'crypto';
+import * as crypto from 'crypto';
 
 /** Define secret for crypto update */
 const SECRET_KEY = process.env.SECRET_KEY || 'INDICINA-REST-API';

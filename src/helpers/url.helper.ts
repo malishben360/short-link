@@ -1,12 +1,4 @@
-import crypto from 'crypto';
-
-/** Define hosting domain
- * Default: http://short.est
-*/
-const DOMAIN_NAME = process.env.DOMAIN_NAME || 'http://short.est/';
-
-/** Define character set for encoding (A-Z, a-z, 0-9) */
-const CHARSET = process.env.CHARSET || 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+import * as crypto from 'crypto';
 
 /** Return total visites */
 export const getVisites = (stats: Array<any>) => {
@@ -41,6 +33,9 @@ export const getReferrerDomains = (stats: Array<any>) => {
     return referrers;
 }
 
+/** Define character set for encoding (A-Z, a-z, 0-9) */
+const CHARSET = process.env.CHARSET || 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
 /** Encoded character creator
  * Return: encoded characters
  */
@@ -61,6 +56,11 @@ export const generateShortCode = (longURL: string, userId: string) => {
 
     return encoded.slice(0, 6);
 }
+
+/** Define hosting domain
+ * Default: http://short.est
+*/
+const DOMAIN_NAME = process.env.DOMAIN_NAME || 'http://short.est/';
 
 /** Extracts the encoded component from a URL string */
 export const extractEncodedComponent = (shortURL: string) => {

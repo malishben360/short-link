@@ -1,25 +1,21 @@
-import express from 'express';
+import * as express from 'express';
 import { get } from 'lodash';
 import ip from 'ip';
 //import geoip from 'geoip-lite';
+
 import { 
     createURL, 
-    createURLStat, 
+    createStatistic, 
     getURLByCode, 
-    getLongURLByUserAndURL, 
-    getURLStatisticByURLId 
-} from '../models';
+    getLongURLByUserIdAndURL, 
+} from '../services';
 import { 
     generateShortCode,
     extractEncodedComponent,
-    getVisites,
-    getCountryVisitsFromUrlPath,
-    getReferrerDomains,
     generateRandomCountryCode,
     generateRandomReferrer,
     extractDomainFromReferrer,
-    isValidURL,
-    getLastVisitedAt
+    isValidURL
 } from '../helpers';
 
 export const encodeLongURL = async (req: express.Request, res: express.Response) => {
@@ -37,16 +33,15 @@ export const encodeLongURL = async (req: express.Request, res: express.Response)
         /** Get short URL code */
         const encoded = generateShortCode(longURL, userId);
 
-        /** It keeps track of previously generated codes to avoid collisions
-         *  with existing ones in the database. 
-         */
-        const existingLongURL = await getLongURLByUserAndURL(userId, longURL);
+        /** It keeps track of previously generated codes to avoid collisions */
+        const existingLongURL = await getLongURLByUserIdAndURL(userId, longURL);
         if (existingLongURL) {
             return res.status(200).json({ 
                 shortURL: `http://short.est/${ existingLongURL.encoded }` 
             });
         }
 
+        /** Create new short URL */
         const shortURL = await createURL({
             long_url: longURL,
             encoded: encoded,
@@ -107,7 +102,7 @@ export const decodeShortURL = async (req: express.Request, res: express.Response
          * change randomReferrers() to domain.
          * change localClientIp to clientIP.
          */
-        await createURLStat({
+        await createStatistic({
             url_id: url._id.toString(),
             ip_address: localClientIP,
             country: generateRandomCountryCode(),
@@ -117,43 +112,6 @@ export const decodeShortURL = async (req: express.Request, res: express.Response
         return res.status(200).json({ longURL: url.long_url }).end();
     } catch (error) {
         console.log(error);
-        return res.sendStatus(400);
-    }
-}
-
-export const computeURLStatistics = async (req: express.Request, res: express.Response) => {
-    try{
-        const { url_path } = req.params;
-        
-        /** Check for encoded component */
-        if (!url_path) {
-            return res.sendStatus(400);
-        }
-
-        const url = await getURLByCode(url_path);
-
-        /** Check for URL */
-        if (!url) {
-            return res.status(404).json().end();
-        }
-
-        const urlId = url._id.toString();
-        const urlStats = await getURLStatisticByURLId(urlId);
-
-        const visites = getVisites(urlStats);
-        const lastVisitedAt = getLastVisitedAt(urlStats) || '0000-00-00T00:00:00.000+00:00';
-        const countries = getCountryVisitsFromUrlPath(urlStats);
-        const referrers = getReferrerDomains(urlStats);
-
-        return res.status(200).json({
-            longURL: url.long_url,
-            visites,
-            countries,
-            referrers,
-            lastVisitedAt
-        }).end();
-    } catch (error) {
-        console.log("Error: ", error);
         return res.sendStatus(400);
     }
 }

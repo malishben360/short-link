@@ -1,5 +1,6 @@
-import { deleteUserById, getUserById, getUsers } from '../models';
-import express from 'express';
+import * as express from 'express';
+
+import { deleteUserById, getUserById, getUsers } from '../services';
 
 export const fectUsers = async (req: express.Request, res: express.Response) => {
     try{
