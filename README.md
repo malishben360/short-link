@@ -6,15 +6,10 @@ ShortLink V1.0.0 is a URL shortening service that allows you to create short, ea
 |   Name    |  Version  |
 |-----------|-----------|
 |  Node.js  |  v18.16.0 |
-|-----------|-----------|
 |TypeScript |  v5.0.4   |
-|-----------|-----------|
 | Express.js| v4.18.2   |
-|-----------|-----------|
 | Mongoose/MongoDB | v7.0.3 |
-|------------------|--------|
 | Jest             | v29.5.0 |
-|------------------|---------|
 
 ## Getting Started
 To get started with ShortLink, follow these steps:
@@ -30,7 +25,7 @@ The [`ShortLink`](https://github.com/your-username/short-link) project has the f
 short-link/
    ├── src/
    │   ├── controllers/
-   |   |   ├── authentication.controller.ts
+   |    |   ├── authentication.controller.ts
    |   |   ├── statistic.controller.ts
    |   |   ├── url.controller.ts
    |   |   └── user.controller.ts
@@ -78,7 +73,7 @@ short-link/
 * `src/models`: Contains the Mongoose models for the MongoDB database
 * `src/services`: Contains the business logic of the application
 * `src/routes/v1`: Contains the API routes for version 1 of the application
-* `src/routes/index.ts`: The combine the all the routes into one router
+* `src/routes/index.ts`: Combines all the routes into one router
 * `src/tests`: Contains the Jest tests for the application
 * `src/index.ts`: The entry point of the application
 
@@ -86,7 +81,7 @@ short-link/
 ShortLink provides the following API endpoints:
 
 * `/api/v1/auth/register`: Registers a new user with the application
-* `/api/v1/auth/login`: Logs in a user and returns a JWT token
+* `/api/v1/auth/login`: Logs in a user and set a cookie.
 * `/api/v1/encode`: Encodes a long URL into a short URL
 * `/api/v1/decode`: Decodes a short URL into a long URL
 * `/api/v1/statistic/:url_path`: Gets the statistics for a particular short URL
@@ -122,17 +117,18 @@ To set up a MongoDB cluster for ShortLink, follow these steps:
 You will receive a URI string after the database is set up, which you will use to connect to the database. The string appears as follows:
 
 #### `mongodb+srv://<YOUR_USERNAME>:<YOUR_PASSWORD>@<YOUR_CLUSTER_URL>/<DATABASE_NAME>?retryWrites=true&w=majority`
-Put this string in the .env file on line 5.
+Put this string on line 5 of .env file.
 
 ## Testing
-To run the tests for ShortLink, Create the above using via the register end point, and use the command `npm run test`. This will run all the Jest tests in the src/tests directory and give you a report of the test results.
+To run the tests for ShortLink, Create the a new user with the above sample payload via the register end point, and use the command `npm run test`.
+This will run all the Jest tests in the src/tests directory and give you a report of the test results.
 
 ## Sugestions and Contributions
-The project is to make three API endpoints available:
+The project main objective is to make three API endpoints available:
 1. `/api/v1/encode`: Encodes a long URL into a short URL
 2. `/api/v1/decode`: Decodes a short URL into a long URL
 3. `/api/v1/statistic/:url_path`: Gets the statistics for a particular short URL
-More end points will be aviable in V1.5.0 after my assessment by Indicina's HR.
+More end points will be aviable in V1.5.0 after my assessment with Indicina's HR.
 
 Contributions are always welcome! If you'd like to contribute to this project, please create a fork of this repository and submit a pull request with your changes.
 
