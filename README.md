@@ -94,19 +94,24 @@ To set up a MongoDB cluster for ShortLink, follow these steps:
 ![Create a project](https://www.freecodecamp.org/news/content/images/size/w1600/2022/09/Screenshot-2022-09-26-205148.png)
 3. Then click Create Project after that.
 4. Create a database in the next window by selecting a cloud provider, a location, and specs. So press `Build a Database` to get going.
+![Build database](
+https://www.freecodecamp.org/news/content/images/size/w1600/2022/09/Screenshot-2022-09-26-205911.png)
 5. Choose "Shared" because it is sufficient for testing purposes. And then click Create.
+![Choose database](https://www.freecodecamp.org/news/content/images/size/w1600/2022/09/Screenshot-2022-09-26-212537.png)
 6. Next, select `aws` as your cloud provider and the region that is closest to you. Following your selection, click `Create Cluster`.
+![Create cluster](https://www.freecodecamp.org/news/content/images/size/w1600/2022/09/Screenshot-2022-09-26-212537.png)
 
 #### The cluster's formation will take some time. Create a user to access your database in the meanwhile.
 
 7. Choose "My Local Environment" because you are runing the application locally. You can then add an IP addresses. To conclude, `click Close`.
+![Choose environment](https://www.freecodecamp.org/news/content/images/size/w1600/2022/09/Screenshot-2022-09-26-213347.png)
 You will receive a URI string after the database is set up, which you will use to connect to the database. The string appears as follows:
 
 #### `mongodb+srv://<YOUR_USERNAME>:<YOUR_PASSWORD>@<YOUR_CLUSTER_URL>/<DATABASE_NAME>?retryWrites=true&w=majority`
-Put this string on line 5 of .env file.
+Replace the place holders with the actual credentials and put the string on line 5 of .env file.
 
 ### Note:
-You can install mongoDB locally using this [`guide`](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-windows/) or use the default one from the .env file.
+You can install mongoDB locally using this [`guide`](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-windows/) or use the default one from the .env.example file.
 
 ### Clone the repository
 1. Clone this repository to your local machine using git clone [https://github.com/your-username/short-link.git](https://github.com/your-username/short-link.git).
