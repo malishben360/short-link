@@ -5,6 +5,6 @@ import { isAuthenticated, isOwner } from '../../middlewares';
 
 export default (router: express.Router) => {
     router.get('/users', isAuthenticated, fectUsers);
-    router.put('/users/:id', isAuthenticated, isOwner, updateUser)
+    router.patch('/users/:id', isAuthenticated, isOwner, updateUser)
     router.delete('/users/:id', isAuthenticated, isOwner, deleteUser);
 }

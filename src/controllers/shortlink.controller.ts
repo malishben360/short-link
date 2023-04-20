@@ -4,12 +4,12 @@ import ip from 'ip';
 //import geoip from 'geoip-lite';
 
 import { 
-    createURL, 
+    createShortLink, 
     createStatistic, 
-    getURLByCode, 
-    deleteURLById,
-    getLongURLByUserIdAndURL,
-    deleteStatisticsByURLId, 
+    getShortLinkByShortCode, 
+    deleteShortLinkById,
+    getShortLinkByUserIdAndURL,
+    deleteStatisticsByShortLinkId, 
 } from '../services';
 import { 
     generateShortCode,
@@ -20,43 +20,43 @@ import {
     isValidURL
 } from '../helpers';
 
-export const encodeLongURL = async (req: express.Request, res: express.Response) => {
+export const encodeOriginalURL = async (req: express.Request, res: express.Response) => {
     try{
-        const { longURL } = req.body;
+        const { originalURL } = req.body;
         
-        /** Check for long URL */
-        if (!longURL || !isValidURL(longURL)) {
+        /** Check for original URL */
+        if (!originalURL || !isValidURL(originalURL)) {
             return res.sendStatus(400);
         }
         
         let userId = get(req, 'identity._id') as string;
         userId = userId.toString();
 
-        /** Get short URL code */
-        const encoded = generateShortCode(longURL, userId);
+        /** Get short link code */
+        const shortCode = generateShortCode(originalURL, userId);
 
         /** It keeps track of previously generated codes to avoid collisions */
-        const existingLongURL = await getLongURLByUserIdAndURL(userId, longURL);
-        if (existingLongURL) {
+        const existingShortLink = await getShortLinkByUserIdAndURL(userId, originalURL);
+        if (existingShortLink) {
             return res.status(200).json({ 
-                shortURL: `http://short.est/${ existingLongURL.encoded }` 
+                shortLink: `http://short.est/${ existingShortLink.shortcode }` 
             });
         }
 
-        /** Create new short URL */
-        const shortURL = await createURL({
-            long_url: longURL,
-            encoded: encoded,
+        /** Create new short link */
+        const shortLink = await createShortLink({
+            original_url: originalURL,
+            shortcode: shortCode,
             user_id: userId
         });
 
-        /** URL is not created */
-        if (!shortURL){
+        /** Short link is not created */
+        if (!shortLink){
             return res.sendStatus(422);
         }
 
         return res.status(201).json({
-            shortURL: `http://short.est/${ encoded }`
+            shortLink: `http://short.est/${ shortCode }`
         }).end();
     } catch (error) {
         console.log("Error: ", error);
@@ -65,13 +65,13 @@ export const encodeLongURL = async (req: express.Request, res: express.Response)
     
 }
 
-export const decodeShortURL = async (req: express.Request, res: express.Response) => {
+export const decodeShortLink = async (req: express.Request, res: express.Response) => {
     try {
-        const { shortURL } = req.body;
-
-        /** Check for short URL */
         const DOMAIN_NAME = process.env.DOMAIN_NAME || 'http://short.est/';
-        if (!shortURL || !(shortURL.startsWith(DOMAIN_NAME))) {
+        const { shortLink } = req.body;
+
+        /** Check for short link */
+        if (!shortLink || !(shortLink.startsWith(DOMAIN_NAME))) {
             return res.sendStatus(400);
         }
 
@@ -90,12 +90,13 @@ export const decodeShortURL = async (req: express.Request, res: express.Response
 
 
 
-        /** Get extract encoded component from short URL*/
-        const encoded = extractEncodedComponent(shortURL);
+        /** Get extract encoded component from short link*/
+        const encodedComponent = extractEncodedComponent(shortLink);
 
-        /** Check if URL exist */
-        const url = await getURLByCode(encoded);
-        if (!url) {
+        const existingShortLink = await getShortLinkByShortCode(encodedComponent);
+
+        /** Check if short link exist */
+        if (!existingShortLink) {
             return res.sendStatus(404);
         }
 
@@ -105,20 +106,20 @@ export const decodeShortURL = async (req: express.Request, res: express.Response
          * change localClientIp to clientIP.
          */
         await createStatistic({
-            url_id: url._id.toString(),
+            shortlink_id: existingShortLink._id.toString(),
             ip_address: localClientIP,
             country: generateRandomCountryCode(),
             referrer: generateRandomReferrer()
         });
 
-        return res.status(200).json({ longURL: url.long_url }).end();
+        return res.status(200).json({ originalURL: existingShortLink.original_url }).end();
     } catch (error) {
         console.log(error);
         return res.sendStatus(400);
     }
 }
 
-export const deleteShortURL = async (req: express.Request, res: express.Response) => {
+export const deleteShortLink = async (req: express.Request, res: express.Response) => {
     try{
         const { url_path } = req.params;
 
@@ -127,21 +128,21 @@ export const deleteShortURL = async (req: express.Request, res: express.Response
             return res.sendStatus(400);
         }
 
-        const shortURL = await getURLByCode(url_path);
+        const shortLink = await getShortLinkByShortCode(url_path);
 
-        /** Check if short URL is available */
-        if (!shortURL) {
+        /** Check if url path is associated with short link */
+        if (!shortLink) {
             return res.sendStatus(404);
         }
 
-        const deletedURL = await deleteURLById(shortURL._id.toString());
+        const deletedShortLink = await deleteShortLinkById(shortLink._id.toString());
 
-        if (!deletedURL) {
+        if (!deletedShortLink) {
             return res.sendStatus(500);
         }
 
-        /** Clear  deleted short URL history */
-        await deleteStatisticsByURLId(deletedURL._id.toString());
+        /** Clear  deleted short link history */
+        await deleteStatisticsByShortLinkId(deletedShortLink._id.toString());
 
         return res.sendStatus(204);
     } catch(error: any) {

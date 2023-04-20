@@ -2,7 +2,7 @@
 export * from './user.service';
 
 /** URL services */
-export * from './url.service';
+export * from './ShortLink.service';
 
  /** URL statistic services */
  export * from './statistic.service';

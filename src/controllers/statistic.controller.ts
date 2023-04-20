@@ -1,10 +1,10 @@
 import * as express from 'express';
 
-import { getURLByCode, getStatisticsByURLId } from '../services';
+import { getShortLinkByShortCode, getStatisticsByShortLinkId } from '../services';
 import {
     getVisites,
     getLastVisitedAt,
-    getCountryVisitsFromUrlPath, 
+    getCountryVisitsFromShortLinkPath, 
     getReferrerDomains
 } from '../helpers';
 
@@ -17,23 +17,23 @@ export const computeStatistics = async (req: express.Request, res: express.Respo
             return res.sendStatus(400);
         }
 
-        const url = await getURLByCode(url_path);
+        const shortLink = await getShortLinkByShortCode(url_path);
 
-        /** Check for URL */
-        if (!url) {
+        /** Check if url path is associated with short link */
+        if (!shortLink) {
             return res.status(404).json().end();
         }
 
-        const urlId = url._id.toString();
-        const urlStats = await getStatisticsByURLId(urlId);
+        const urlId = shortLink._id.toString();
+        const urlStats = await getStatisticsByShortLinkId(urlId);
 
         const visites = getVisites(urlStats);
         const lastVisitedAt = getLastVisitedAt(urlStats) || '0000-00-00T00:00:00.000+00:00';
-        const countries = getCountryVisitsFromUrlPath(urlStats);
+        const countries = getCountryVisitsFromShortLinkPath(urlStats);
         const referrers = getReferrerDomains(urlStats);
 
         return res.status(200).json({
-            longURL: url.long_url,
+            original_url:shortLink.original_url,
             visites,
             countries,
             referrers,

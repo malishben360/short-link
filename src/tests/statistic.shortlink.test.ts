@@ -2,9 +2,9 @@ import mongoose from 'mongoose';
 import request from 'supertest';
 import { app, server } from '..'
 import * as dotenv from 'dotenv';
-import {describe, expect, test} from '@jest/globals';
+import {describe, expect, test, beforeEach, beforeAll, afterEach} from '@jest/globals';
 
-import { extractEncodedComponent } from '../helpers/url.helper';
+import { extractEncodedComponent } from '../helpers/shortlink.helper';
 
 dotenv.config();
 
@@ -20,8 +20,8 @@ afterEach(async () => {
 });
 
 describe('GET /statistic/:url_path', () => {
-  const longURL = 'https://indicina.com';
-  let shortURL: string;
+  const originalURL = 'https://indicina.com';
+  let shortLink: string;
   let agent: any;
 
   beforeAll(async () => {
@@ -33,24 +33,25 @@ describe('GET /statistic/:url_path', () => {
     const cookie = response.header['set-cookie'][0];
     agent.set('Cookie', cookie);
 
-    /** create a short URL base on mocked user*/
+    /** Create a short link base on mocked user*/
     response = await agent
       .post('/api/v1/encode')
-      .send({ longURL });
-    shortURL = response.body.shortURL;
+      .send({ originalURL });
+    shortLink = response.body.shortLink;
+    console.log(shortLink);
   });
 
-  test('should return statistics for a valid short URL', async () => {
-    /** send a request to get statistics for the short URL */
+  test('should return statistics for a valid short link', async () => {
+    /** Send a request to get statistics for the short link */
     const response = await agent
-      .get(`/api/v1/statistic/${extractEncodedComponent(shortURL)}`)
+      .get(`/api/v1/statistic/${extractEncodedComponent(shortLink)}`)
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/); // Validates that the response body is in JSON format.
 
     /** validate the response body and status code*/
     expect(response.statusCode).toBe(200);
     expect(response.body).toEqual(expect.objectContaining({
-      longURL,
+      original_url: originalURL,
       countries: {},
       referrers: {},
       visites: 0,
@@ -58,8 +59,8 @@ describe('GET /statistic/:url_path', () => {
     }));
   });
 
-  test('should return 404 for an invalid short URL', async () => {
-    /** send a request to get statistics for a non-existent short URL */
+  test('should return 404 for an invalid short link', async () => {
+    /** Send a request to get statistics for a non-existent short link */
     const response = await request(app)
       .get(`/api/v1/statistic/${extractEncodedComponent('http://short.est/invalid')}`)
       .set('Accept', 'application/json')

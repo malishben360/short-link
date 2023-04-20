@@ -19,35 +19,35 @@ short-link/
    │   ├── controllers/
    |   |   ├── authentication.controller.ts
    |   |   ├── statistic.controller.ts
-   |   |   ├── url.controller.ts
+   |   |   ├── shortlink.controller.ts
    |   |   └── user.controller.ts
    │   ├── helpers/
-   |   |   ├──auth.helper.ts
-   |   |   ├──url.helper.ts
+   |   |   ├── auth.helper.ts
+   |   |   ├── shortlink.helper.ts
    |   |   └── index.ts  
    │   ├── middlewares/
    |   |   └── index.ts
    │   ├── models/
    |   |   ├── statistic.model.ts
-   |   |   ├── url.model.ts
+   |   |   ├── shortlink.model.ts
    |   |   └── user.model.ts
    │   ├── services/
    |   |   ├── statistic.service.ts
-   |   |   ├── url.service.ts
+   |   |   ├── shortlink.service.ts
    |   |   ├── user.service.ts
    |   |   └── index.ts
    │   ├── routes/
    │   │   ├── v1/
    |   |   |   ├── authentication.route.ts
    |   |   |   ├── statistic.route.ts
-   |   |   |   ├── url.route.ts
+   |   |   |   ├── shortlink.route.ts
    |   |   |   └── user.route.ts
    |   |   └── index.ts
    │   ├── tests/
    |   |   ├── authentication.test.ts
-   |   |   ├── decode.url.test.ts
-   |   |   ├── encode.url.route.ts
-   |   |   └── statistic.url.route.ts
+   |   |   ├── decode.shortlink.test.ts
+   |   |   ├── encode.shortlink.route.ts
+   |   |   └── statistic.shortlink.route.ts
    │   └── index.ts
    ├── .env.example
    ├── package.json
@@ -79,9 +79,9 @@ ShortLink provides the following API endpoints:
 |---------------------------|----------------------------------------|---------------------------------------------------|
 |POST `/api/v1/auth/register`      |{ username: "malish", email: "malish@indicina.co", password: "12345" } |Registers a new user with the application |
 |POST `/api/v1/auth/login`         |{ email: "malish@indicina.com", password: "12345" }              |Logs in a user and setup cookie           |
-|POST `/api/v1/encode`             |{ longURL: "https://indicina.co" }                               |Encodes a long URL into a short URL       |
-|GET `/api/v1/decode`              |{ shortURL: "http://short.est/" }                                |Decodes a short URL into a long URL       |
-|GET `/api/v1/statistic/:url_path` |                                                            |Gets the statistics for a particular short URL|
+|POST `/api/v1/encode`             |{ longURL: "https://indicina.co" }                               |Encodes an original URL into a short link       |
+|GET `/api/v1/decode`              |{ shortURL: "http://short.est/" }                                |Decodes a short link into an original URL       |
+|GET `/api/v1/statistic/:url_path` |                                                            |Gets the statistics for a particular short link|
 
 ## Getting Started
 To get started with ShortLink, follow these steps:
@@ -91,6 +91,7 @@ To set up a MongoDB cluster for ShortLink, follow these steps:
 
 1. First, create a [`MongoDB account or login`](https://account.mongodb.com/account/login).
 2. Then create a new project. Give it a name and press the Next button.
+![Create a project](https://www.freecodecamp.org/news/content/images/size/w1600/2022/09/Screenshot-2022-09-26-205148.png)
 3. Then click Create Project after that.
 4. Create a database in the next window by selecting a cloud provider, a location, and specs. So press `Build a Database` to get going.
 5. Choose "Shared" because it is sufficient for testing purposes. And then click Create.
@@ -105,23 +106,22 @@ You will receive a URI string after the database is set up, which you will use t
 Put this string on line 5 of .env file.
 
 ### Note:
-You can install mongoDB locally using this [`guide`](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-windows/)
+You can install mongoDB locally using this [`guide`](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-windows/) or use the default one from the .env file.
 
 ### Clone the repository
 1. Clone this repository to your local machine using git clone [https://github.com/your-username/short-link.git](https://github.com/your-username/short-link.git).
-2. Install the required dependencies using npm install
+2. Install the required dependencies using `npm install`.
 3. Create a .env file in the root of the project and fill in the required environment variables. See .env.example for an example configuration or rename the file to .env.
-4. Start the server using npm run start
+4. Start the server using `npm run start`
 
 ### Testing
-To run the tests for ShortLink, Create a new user with the above sample payload via the register end point, and use the command `npm run test`.
+To run the tests for ShortLink, use the command `npm run test`.
 This will run all the Jest tests in the src/tests directory and give you a report of the test results. 
-#### Note: make sure a user with email address malish@indicina.co and password 12345 is created before runing the tests.
 
 ## Sugestions and Contributions
 The project main objective is to make three API endpoints available:
-1. `/api/v1/encode`: Encodes a long URL into a short URL
-2. `/api/v1/decode`: Decodes a short URL into a long URL
+1. `/api/v1/encode`: Encodes an original URL into a short link
+2. `/api/v1/decode`: Decodes a short link into an original URL
 3. `/api/v1/statistic/:url_path`: Gets the statistics for a particular short URL
 More end points will be aviable in V1.5.0 after my assessment with Indicina's HR.
 

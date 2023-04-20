@@ -33,17 +33,18 @@ server.listen(port, ()=> {
     console.log('speak to me lord, your server is listening!'); 
 })
 
-/** Mongo Database connection url
- * If you are connection to a live cluster
- * change the url to the live cluster url.
- */
-const MONGODB_URL = process.env.MONGODB_URL || 'mongodb://127.0.0.1:27017/ShortLinkDB';
+/**MongoDB connection URL, if not specified in .env it will default to this*/
+const MONGODB_URL = process.env.MONGODB_URL || 'mongodb+srv://myAtlasDBUser:esMzzamVs0h6P6ti@myatlasclusteredu.5igbeds.mongodb.net/indicina_shortlink?retryWrites=true&w=majority';
 
 /** Sync mongoose Promise with node's Promise
  * and connect to the local mongoDB.
  */
 mongoose.Promise = Promise;
 mongoose.connect(MONGODB_URL);
+mongoose.connection.on('open', () => {
+    process.env.MONGODB_URL ? console.log('Specified database connected!')
+    : console.log('Default database connected!');
+});
 mongoose.connection.on('error', (error: Error) => console.log(error));
 
 /** This is the root route. It is used to check if the server is running. */

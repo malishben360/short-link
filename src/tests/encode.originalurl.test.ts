@@ -29,25 +29,25 @@ describe('GET /encode', () => {
     agent.set('Cookie', cookie);
   });
 
-  test('should return a short URL when given a valid long URL', async () => {
+  test('should return a short link when given a valid original URL', async () => {
     const response = await agent
       .post('/api/v1/encode')
-      .send({ longURL: 'https://indicina.co' })
+      .send({ originalURL: 'https://indicina.co' })
       .expect('Content-Type', /json/); // Validates that the response body is in JSON format.
 
-    /** If short exist expecting 200 status code else 201 status code */
+    /** If short link exist expecting 200 status code else 201 status code */
     if (response.statusCode === 200) {
       expect(response.statusCode).toBe(200)
-      expect(response.body).toHaveProperty('shortURL');
-      expect(response.body.shortURL).toMatch(/^http:\/\/short\.est\/.*/);
+      expect(response.body).toHaveProperty('shortLink');
+      expect(response.body.shortLink).toMatch(/^http:\/\/short\.est\/.*/);
     } else if (response.statusCode === 201) {
       expect(response.statusCode).toBe(201)
-      expect(response.body).toHaveProperty('shortURL');
-      expect(response.body.shortURL).toMatch(/^http:\/\/short\.est\/.*/);
+      expect(response.body).toHaveProperty('shortLink');
+      expect(response.body.shortLink).toMatch(/^http:\/\/short\.est\/.*/);
     }
   });
 
-  test('should return 400 if longURL is not provided', async () => {
+  test('should return 400 if original URL is not provided', async () => {
     const response = await agent
       .post('/api/v1/encode')
       .send({});
@@ -56,10 +56,10 @@ describe('GET /encode', () => {
     expect(response.statusCode).toBe(400);
   });
 
-  test('should return 400 if longURL is not a valid URL', async () => {
+  test('should return 400 if original URL is not a valid URL', async () => {
     const response = await agent
       .post('/api/v1/encode')
-      .send({ longURL: 'invalid-url' });
+      .send({ originalURL: 'invalid-url' });
 
     /** Validate the status code */
     expect(response.statusCode).toBe(400);

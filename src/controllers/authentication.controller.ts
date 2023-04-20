@@ -31,7 +31,12 @@ export const login = async (req: express.Request, res: express.Response) => {
 
         res.cookie(COOKIE_NAME, user.authentication.sessionToken, { domain: 'localhost', path: '/'});
 
-        return res.status(200).json(user).end();
+        /** Remove authentication field for security purpose */
+        return res.status(200).json({
+            _id: user._id,
+            username: user.username,
+            email: user.email,
+        }).end();
     } catch(error){
         console.log("Error: ", error);
         res.sendStatus(400);
@@ -64,6 +69,9 @@ export const register = async (req: express.Request, res: express.Response) => {
                 password: authentication(salt, password)
             }
         })
+
+        /** Removed auth field for security purpose */
+        delete user.authentication
 
         /** Send back the newly created user */
         return res.status(201).json(user).end();

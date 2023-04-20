@@ -29,28 +29,28 @@ describe('GET /decode', () => {
     agent.set('Cookie', cookie);
   });
 
-  test('should return the long URL for a given short URL', async () => {
-    /** Generate short url base on user */
+  test('should return the original URL for a given short link', async () => {
+    /** Generate short link base on user */
     const encodeResponse = await agent
       .post('/api/v1/encode')
-      .send({ longURL: 'https://indicina.co' });
-    const shortURL = encodeResponse.body.shortURL;
+      .send({ originalURL: 'https://indicina.co' });
+    const shortLink = encodeResponse.body.shortLink;
 
     const decodeResponse = await agent
       .get('/api/v1/decode')
-      .send({ shortURL })
+      .send({ shortLink })
       .expect('Content-Type', /json/); // Validates that the response body is in JSON format.
 
     /** Validate body and status code */
     expect(decodeResponse.statusCode).toBe(200);
-    expect(decodeResponse.body).toHaveProperty('longURL');
-    expect(decodeResponse.body.longURL).toBe('https://indicina.co');
+    expect(decodeResponse.body).toHaveProperty('originalURL');
+    expect(decodeResponse.body.originalURL).toBe('https://indicina.co');
   });
 
   test('should return 404 if the provided short URL is not found', async () => {
     const response = await agent
       .get('/api/v1/decode')
-      .send({ shortURL: 'http://short.est/invalid' });
+      .send({ shortLink: 'http://short.est/invalid' });
 
     /** Validate status code */
     expect(response.statusCode).toBe(404);

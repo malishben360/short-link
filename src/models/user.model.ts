@@ -1,9 +1,12 @@
-import mongoose from "mongoose";
+import mongoose, { Document } from "mongoose";
 
-/** Fields with select false are not return by default
- * Always specify during data fetch.
- */
-const UserSchema = new mongoose.Schema({
+export interface User extends Document {
+    username: string,
+    email: string,
+    authentication: { password: string, salt: string, sessionToken: string }
+}
+
+const UserSchema = new mongoose.Schema<User>({
         username: { type: String, required: true },
         email: { type: String, required: true },
         authentication: {

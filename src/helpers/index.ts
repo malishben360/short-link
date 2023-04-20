@@ -2,4 +2,4 @@
 export * from './auth.helper';
 
 /** url helpers */
-export * from './url.helper';
+export * from './shortlink.helper';

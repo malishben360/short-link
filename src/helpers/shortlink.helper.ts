@@ -11,8 +11,8 @@ export const getLastVisitedAt = (stats: Array<any>) => {
     return sortedByCreatedAt.length > 0 ? sortedByCreatedAt[0].created_at : null;
 }
 
-/** Return array of countries the short url is click from */
-export const getCountryVisitsFromUrlPath = (stats: Array<any>) => {
+/** Return array of countries the short link is clicked from */
+export const getCountryVisitsFromShortLinkPath = (stats: Array<any>) => {
     let countries = stats.reduce((prev, curr) => {
         let country = curr.country
         if (!prev[country]) prev[country] = 1
@@ -22,7 +22,7 @@ export const getCountryVisitsFromUrlPath = (stats: Array<any>) => {
     return countries;
 }
 
-/** Return array of domains the short url visited from */
+/** Return array of domains the short link was visited from */
 export const getReferrerDomains = (stats: Array<any>) => {
     let referrers = stats.reduce((prev, curr) => {
         let domain = curr.referrer
@@ -36,25 +36,25 @@ export const getReferrerDomains = (stats: Array<any>) => {
 /** Define character set for encoding (A-Z, a-z, 0-9) */
 const CHARSET = process.env.CHARSET || 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
-/** Encoded character creator
- * Return: encoded characters
+/** Short code character creator
+ * Return: short code characters
  */
-export const generateShortCode = (longURL: string, userId: string) => {
+export const generateShortCode = (url: string, userId: string) => {
 
-    /** Hashes the provided long URL using the SHA256 algorithm to generate an integer value. */
-    const updatedURL = longURL.concat(userId);
+    /** Generates an integer hash value for a long URL using SHA256 algorithm to uniquely identify it. */
+    const updatedURL = url.concat(userId);
     const hash = crypto.createHash("sha256").update(updatedURL).digest("hex");
     const rand = parseInt(hash, 16);
 
-    let encoded = '';
+    let shortCode = '';
     let remainder = rand;
     while (remainder > 0) {
         const digit = remainder % CHARSET.length;
-        encoded = CHARSET[digit] + encoded;
+        shortCode = CHARSET[digit] + shortCode;
         remainder = Math.floor(remainder / CHARSET.length);
     }
 
-    return encoded.slice(0, 6);
+    return shortCode.slice(0, 6);
 }
 
 /** Define hosting domain
@@ -62,10 +62,10 @@ export const generateShortCode = (longURL: string, userId: string) => {
 */
 const DOMAIN_NAME = process.env.DOMAIN_NAME || 'http://short.est/';
 
-/** Extracts the encoded component from a URL string */
-export const extractEncodedComponent = (shortURL: string) => {
-    const encoded = shortURL.replace(DOMAIN_NAME, "");
-    return encoded;
+/** Extracts the encoded component from original URL string */
+export const extractEncodedComponent = (shortLink: string) => {
+    const encodedComponent = shortLink.replace(DOMAIN_NAME, "");
+    return encodedComponent;
 }
 
 /** Validate URL */
@@ -85,14 +85,16 @@ export const extractDomainFromReferrer = (referrer: string ) => {
     return domain;
 }  
 
-/** Returns a randomly selected country code from a list of country codes. */
+/** Returns a random country code. */
 export const generateRandomCountryCode = () => {
     const countries = ['US', 'SWZ', 'TUR', 'USA', 'GBR', 'NGA'];
     const rand = Math.ceil(Math.random() * 5);
     return countries[rand];
 };
 
-/** Generates a random HTTP referrer URL string, simulating a user coming from an external website. */
+/** Generates a random HTTP referrer URL string that 
+ * simulates a user coming from an external website. 
+ * */
 export const generateRandomReferrer = () => {
     const referrers = [
         'https:indicina.co',
